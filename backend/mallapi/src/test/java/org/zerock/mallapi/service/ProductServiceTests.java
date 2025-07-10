@@ -43,6 +43,14 @@ public class ProductServiceTests {
         
     // }
 
+    // @Test
+    // public void testRead(){
+    //     Long pno = 12L;
+    //     ProductDTO productDTO = productService.get(pno);
+    //     log.info(productDTO);
+    //     log.info(productDTO.getUploadFileNames());
+    // }
+
     @Test
     public void testRead(){
         Long pno = 12L;

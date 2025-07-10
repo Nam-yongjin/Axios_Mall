@@ -50,7 +50,7 @@ public class Product {
         this.pdesc = desc;
     }
 
-    public void changename(String name){
+    public void changeName(String name){
         this.pname = name;
     }
 

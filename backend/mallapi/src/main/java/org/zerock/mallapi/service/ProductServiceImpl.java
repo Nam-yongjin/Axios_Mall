@@ -112,4 +112,43 @@ public class ProductServiceImpl implements ProductService{
 
         return productDTO;
     }
+
+    // 수정 기능의 처리에서는 첨부파일의 처리를 주의해야 한다. 
+    // ProductDTO에서는 List<MultipartFile>타입으로 선언된 files로 존재하고, 
+    // List<String> 타입인 uploadFileNames가 존재하는데 uploadFileNames는 기존에 업로드된 
+    // 파일들의 이름을 의미하고, files는 처리가 필요한 새로운 파일들이다. 실제 DB에 추가되는 것은 
+    // 문자열로 된 uploadFileNames이므로 업로드 작업이 완료된 후에는 이미 업로드된 uploadFileNames에 
+    // 업로드된 파일의 이름들을 추가해서 구성해 줘야 한다.
+    // DB와 관련된 엔티티에서는 uploadFileNames의 내용이 첨부파일의 이름들이기 때문에 기존의 Product 객체가 
+    // 가진 모든 파일을 지우고, ProductDTO가 가진 uploadFileNames 내용들로 새롭게 추가해서 저장하는 과정으로 처리된다.
+    @Override
+    public void modify(ProductDTO productDTO){
+
+        // read
+        Optional<Product> result = productRepository.findById(productDTO.getPno());
+
+        Product product = result.orElseThrow();
+
+        // change pname, pdesc, price
+        product.changeName(productDTO.getPname());
+        product.changeDesc(productDTO.getPdesc());
+        product.changePrice(productDTO.getPrice());
+
+        // upload File - clear First
+        product.clearList();
+        // 업로드 처리가 끝난 파일들의 이름 리스트
+        List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+        if(uploadFileNames != null && uploadFileNames.size() > 0){
+            uploadFileNames.stream().forEach(uploadName -> {
+                product.addImageString(uploadName);
+            });
+        }
+        productRepository.save(product);
+    }
+
+    @Override
+    public void remove(Long pno){
+        productRepository.updateToDelete(pno, true);
+    }
 }

@@ -87,7 +87,6 @@ const ModifyComponent = ({ pno }) => {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }

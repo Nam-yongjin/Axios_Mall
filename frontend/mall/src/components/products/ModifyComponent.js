@@ -31,7 +31,7 @@ const ModifyComponent = ({ pno }) => {
     const handleChangeProduct = (e) => {
         product[e.target.name] = e.target.value;
         setProduct({ ...product });
-    }
+    };
     const deleteOldImages = (imageName) => {
 
     }
